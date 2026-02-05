@@ -1,8 +1,20 @@
-FROM n8nio/n8n:latest-full
+FROM n8nio/n8n:latest-debian
 
 USER root
 
-RUN pip3 install --no-cache-dir yt-dlp \
- && ln -s /usr/local/bin/yt-dlp /usr/bin/yt-dlp
+# Fix old Debian repo + install tools
+RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list \
+ && sed -i 's|security.debian.org|archive.debian.org|g' /etc/apt/sources.list \
+ && apt-get update \
+ && apt-get install -y \
+    python3 \
+    python3-pip \
+    ffmpeg \
+    curl \
+ && pip3 install --no-cache-dir yt-dlp \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 USER node
+
+EXPOSE 5678
