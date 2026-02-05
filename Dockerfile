@@ -1,14 +1,15 @@
-FROM n8nio/n8n:latest
+FROM n8nio/n8n:latest-debian
 
 USER root
 
-# Install dependencies + yt-dlp (Alpine way)
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     python3 \
-    py3-pip \
+    python3-pip \
     ffmpeg \
     curl \
- && pip3 install --no-cache-dir yt-dlp
+ && pip3 install --no-cache-dir yt-dlp \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 USER node
 
