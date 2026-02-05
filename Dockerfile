@@ -2,7 +2,7 @@ FROM n8nio/n8n:latest-debian
 
 USER root
 
-# Fix old Debian repo + install tools
+# Fix repo + install yt-dlp
 RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list \
  && sed -i 's|security.debian.org|archive.debian.org|g' /etc/apt/sources.list \
  && apt-get update \
@@ -15,6 +15,7 @@ RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-USER node
+# ❗ Do NOT switch user
+# USER node   <-- remove this
 
 EXPOSE 5678
